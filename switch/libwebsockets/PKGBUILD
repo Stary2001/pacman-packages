@@ -1,0 +1,44 @@
+# Contributor:  Ezekiel Bethel <zek@9net.org>
+
+pkgname=switch-libwebsockets
+pkgver=3.1.0
+pkgrel=1
+pkgdesc='C websocket library.'
+arch=('any')
+url="https://libwebsockets.org/"
+license=('LGPL')
+options=(!strip libtool staticlibs)
+source=("https://github.com/warmcat/libwebsockets/archive/v${pkgver}.tar.gz" "libwebsockets.patch")
+sha256sums=('db948be74c78fc13f1f1a55e76707d7baae3a1c8f62b625f639e8f2736298324' 'SKIP')
+makedepends=('switch-pkg-config' 'devkitpro-pkgbuild-helpers')
+groups=('switch-portlibs')
+build() {
+  cd libwebsockets-$pkgver
+  patch -p1 < $srcdir/libwebsockets.patch
+  cd .. 
+
+  mkdir -p build
+  cd build
+
+  source /opt/devkitpro/switchvars.sh
+
+  cmake -G"Unix Makefiles" -DCMAKE_TOOLCHAIN_FILE=/opt/devkitpro/switch.cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=$PORTLIBS_PREFIX \
+    -DCMAKE_C_FLAGS="$CFLAGS $CPPFLAGS"\
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS $CPPFLAGS"\
+    -DLWS_WITH_MBEDTLS=ON \
+    -DLWS_WITH_SHARED=OFF \
+    -DLWS_WITHOUT_TEST_SERVER=ON \
+    -DLWS_WITHOUT_TEST_CLIENT=ON \
+    -DLWS_WITHOUT_TESTAPPS=ON \
+    ../libwebsockets-$pkgver
+
+  make
+}
+
+package() {
+  cd build
+  make DESTDIR="$pkgdir" install
+}
+
