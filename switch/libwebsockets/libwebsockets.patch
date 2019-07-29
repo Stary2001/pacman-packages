@@ -1,6 +1,27 @@
+diff -Naur libwebsockets-3.1.0/CMakeLists.txt libwebsockets-3.1.0-patched/CMakeLists.txt
+--- libwebsockets-3.1.0/CMakeLists.txt	2018-11-23 03:30:56.000000000 +0000
++++ libwebsockets-3.1.0-patched/CMakeLists.txt	2019-06-16 07:26:02.652304602 +0100
+@@ -2122,7 +2122,7 @@
+ 		)
+ endif (LWS_WITH_LWSWS)
+ 
+-if (UNIX)
++if (UNIX OR SWITCH_LIBNX)
+ 
+ # Generate and install pkgconfig.
+ # (This is not indented, because the tabs will be part of the output)
+@@ -2162,7 +2162,7 @@
+ 		DESTINATION lib${LIB_SUFFIX}/pkgconfig)
+ 
+ 
+-endif(UNIX)
++endif(UNIX OR SWITCH_LIBNX)
+ 
+ #
+ # Installation preparations.
 diff -Naur libwebsockets-3.1.0/include/libwebsockets.h libwebsockets-3.1.0-patched/include/libwebsockets.h
 --- libwebsockets-3.1.0/include/libwebsockets.h	2018-11-23 03:30:56.000000000 +0000
-+++ libwebsockets-3.1.0-patched/include/libwebsockets.h	2019-06-16 07:09:09.293136102 +0100
++++ libwebsockets-3.1.0-patched/include/libwebsockets.h	2019-06-16 07:25:14.862185075 +0100
 @@ -100,7 +100,7 @@
  #include <sys/capability.h>
  #endif
@@ -12,7 +33,7 @@ diff -Naur libwebsockets-3.1.0/include/libwebsockets.h libwebsockets-3.1.0-patch
  #endif
 diff -Naur libwebsockets-3.1.0/lib/plat/unix/private.h libwebsockets-3.1.0-patched/lib/plat/unix/private.h
 --- libwebsockets-3.1.0/lib/plat/unix/private.h	2018-11-23 03:30:56.000000000 +0000
-+++ libwebsockets-3.1.0-patched/lib/plat/unix/private.h	2019-06-16 07:08:04.709645834 +0100
++++ libwebsockets-3.1.0-patched/lib/plat/unix/private.h	2019-06-16 07:25:14.862185075 +0100
 @@ -41,8 +41,10 @@
  #include <sys/types.h>
  #include <sys/stat.h>
@@ -46,7 +67,7 @@ diff -Naur libwebsockets-3.1.0/lib/plat/unix/private.h libwebsockets-3.1.0-patch
  # include "netinet/tcp_var.h"
 diff -Naur libwebsockets-3.1.0/lib/plat/unix/unix-misc.c libwebsockets-3.1.0-patched/lib/plat/unix/unix-misc.c
 --- libwebsockets-3.1.0/lib/plat/unix/unix-misc.c	2018-11-23 03:30:56.000000000 +0000
-+++ libwebsockets-3.1.0-patched/lib/plat/unix/unix-misc.c	2019-06-16 07:10:30.743334483 +0100
++++ libwebsockets-3.1.0-patched/lib/plat/unix/unix-misc.c	2019-06-16 07:25:14.862185075 +0100
 @@ -40,6 +40,7 @@
  
  LWS_VISIBLE void lwsl_emit_syslog(int level, const char *line)
@@ -65,7 +86,7 @@ diff -Naur libwebsockets-3.1.0/lib/plat/unix/unix-misc.c libwebsockets-3.1.0-pat
  
 diff -Naur libwebsockets-3.1.0/lib/plat/unix/unix-sockets.c libwebsockets-3.1.0-patched/lib/plat/unix/unix-sockets.c
 --- libwebsockets-3.1.0/lib/plat/unix/unix-sockets.c	2018-11-23 03:30:56.000000000 +0000
-+++ libwebsockets-3.1.0-patched/lib/plat/unix/unix-sockets.c	2019-06-16 07:14:27.093912911 +0100
++++ libwebsockets-3.1.0-patched/lib/plat/unix/unix-sockets.c	2019-06-16 07:25:14.862185075 +0100
 @@ -21,7 +21,6 @@
  
  #define _GNU_SOURCE

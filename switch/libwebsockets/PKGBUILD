@@ -9,7 +9,7 @@ url="https://libwebsockets.org/"
 license=('LGPL')
 options=(!strip libtool staticlibs)
 source=("https://github.com/warmcat/libwebsockets/archive/v${pkgver}.tar.gz" "libwebsockets.patch")
-sha256sums=('db948be74c78fc13f1f1a55e76707d7baae3a1c8f62b625f639e8f2736298324' 'f3d281e0d1f65aa99c1da3968232b2023ad1d2a1dbecfb18e04ee06dcd8698e6')
+sha256sums=('db948be74c78fc13f1f1a55e76707d7baae3a1c8f62b625f639e8f2736298324' 'c36ff0d78282b9786e8a634cc755d3ade6481d2b8646df859cd6c8decbf8ab8f')
 makedepends=('switch-pkg-config' 'devkitpro-pkgbuild-helpers')
 groups=('switch-portlibs')
 build() {
