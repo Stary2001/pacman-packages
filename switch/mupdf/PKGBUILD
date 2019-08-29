@@ -1,0 +1,56 @@
+# Contributor: Ezekiel Bethel <zek@9net.org>
+
+pkgname=('switch-mupdf')
+pkgver=1.16.1
+pkgrel=1
+pkgdesc="A lightweight PDF, XPS, and E-book viewer."
+arch=('any')
+license=('AGPL')
+url="https://mupdf.com/"
+options=(!strip libtool staticlibs)
+source=(https://mupdf.com/downloads/archive/mupdf-$pkgver-source.tar.xz)
+sha256sums=('6fe78184bd5208f9595e4d7f92bc8df50af30fbe8e2c1298b581c84945f2f5da')
+makedepends=('switch-pkg-config' 'devkitpro-pkgbuild-helpers')
+depends=('switch-freetype' 'switch-libjpeg-turbo' 'switch-zlib')
+groups=('switch-portlibs')
+
+build() {
+  source /opt/devkitpro/switchvars.sh
+
+  # XCFLAGS here is intentional
+  # "Do not specify CFLAGS or LIBS on the make invocation line - specify
+  # XCFLAGS or XLIBS instead. Make ignores any lines in the makefile that
+  # set a variable that was set on the command line" - mupdf makefile
+
+  make -C "$srcdir/mupdf-$pkgver-source" \
+  CC=${TOOL_PREFIX}gcc \
+  AR=${TOOL_PREFIX}ar \
+  RANLIB=${TOOL_PREFIX}ranlib \
+  XCFLAGS="${CPPFLAGS} ${CFLAGS}" \
+  USE_SYSTEM_FREETYPE=yes \
+  USE_SYSTEM_HARFBUZZ=yes \
+  USE_SYSTEM_JBIG2DEC=no \
+  USE_SYSTEM_JPEGXR=no \
+  USE_SYSTEM_LCMS2=no \
+  USE_SYSTEM_LIBJPEG=yes \
+  USE_SYSTEM_MUJS=no \
+  USE_SYSTEM_OPENJPEG=yes \
+  USE_SYSTEM_ZLIB=yes \
+  libs
+}
+
+package() {
+  source /opt/devkitpro/switchvars.sh
+
+  export DESTDIR=$pkgdir/$PORTLIBS_PREFIX
+
+  install -d $DESTDIR/include/mupdf
+  install -d $DESTDIR/include/mupdf/fitz
+  install -d $DESTDIR/include/mupdf/pdf
+  install -m 644 $srcdir/mupdf-$pkgver-source/include/mupdf/*.h $DESTDIR/include/mupdf
+  install -m 644 $srcdir/mupdf-$pkgver-source/include/mupdf/fitz/*.h $DESTDIR/include/mupdf/fitz
+  install -m 644 $srcdir/mupdf-$pkgver-source/include/mupdf/pdf/*.h $DESTDIR/include/mupdf/pdf
+  install -d $DESTDIR/lib
+  install -m 644 $srcdir/mupdf-$pkgver-source/build/release/libmupdf.a $DESTDIR/lib
+  install -m 644 $srcdir/mupdf-$pkgver-source/build/release/libmupdf-third.a $DESTDIR/lib
+}
