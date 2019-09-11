@@ -24,17 +24,19 @@ build() {
 
   make -C "$srcdir/mupdf-$pkgver-source" \
   CC=${TOOL_PREFIX}gcc \
+  CXX=${TOOL_PREFIX}g++ \
+  LD=${TOOL_PREFIX}ld \
   AR=${TOOL_PREFIX}ar \
   RANLIB=${TOOL_PREFIX}ranlib \
   XCFLAGS="${CPPFLAGS} ${CFLAGS}" \
   USE_SYSTEM_FREETYPE=yes \
-  USE_SYSTEM_HARFBUZZ=yes \
+  USE_SYSTEM_HARFBUZZ=no \
   USE_SYSTEM_JBIG2DEC=no \
   USE_SYSTEM_JPEGXR=no \
   USE_SYSTEM_LCMS2=no \
   USE_SYSTEM_LIBJPEG=yes \
   USE_SYSTEM_MUJS=no \
-  USE_SYSTEM_OPENJPEG=yes \
+  USE_SYSTEM_OPENJPEG=no \
   USE_SYSTEM_ZLIB=yes \
   libs
 }
